@@ -1,13 +1,29 @@
-### GET request to example server
+### GET test request to example server
 GET http://localhost:8080/test
 
-### GET request to example server
+### GET posts from server
 GET http://localhost:8080/posts
 
-###
+### POST post from server
 POST http://localhost:8080/posts
+Content-Type: application/json
+
 {
-"title": "hello",
-"content": "hello2",
-"author": "hhhh"
+  "title": "hello",
+  "author": "hhhh",
+  "password": "@2aaaa",
+  "content": ""
 }
+
+### PATCH update post from server
+PATCH http://localhost:8080/posts/2
+Content-Type: application/json
+
+{
+  "title": "world!",
+  "password": "dddddddd",
+  "content": "Oh!good!"
+}
+
+### DELETE post from server
+DELETE http://localhost:8080/posts/1

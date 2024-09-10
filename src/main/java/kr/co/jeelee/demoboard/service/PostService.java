@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostService {
 
-	private PostRepository postRepository;
+	private final PostRepository postRepository;
 
 	public List<PostEntity> findAll() {
 		return postRepository.findAll();
