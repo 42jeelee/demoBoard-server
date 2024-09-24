@@ -4,6 +4,8 @@ import java.util.List;
 
 import kr.co.jeelee.demoboard.request.PostCreateRequest;
 import kr.co.jeelee.demoboard.request.PostUpdateRequest;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import kr.co.jeelee.demoboard.entity.PostEntity;
@@ -15,9 +17,10 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
 
 	private final PostRepository postRepository;
+	private final PasswordEncoder passwordEncoder;
 
-	private boolean validatePassword(String dbPassword, String password) {
-		return dbPassword.equals(password);
+	private boolean checkPassword(String password, String dbPassword) {
+		return passwordEncoder.matches(password, dbPassword);
 	}
 
 	public List<PostEntity> findAll() {
@@ -29,7 +32,8 @@ public class PostService {
 	}
 
 	public PostEntity create(PostCreateRequest request) {
-		PostEntity postEntity = PostEntity.create(request.getTitle(), request.getAuthor(), request.getPassword(), request.getContent());
+		String encodedPassword = passwordEncoder.encode(request.getPassword());
+		PostEntity postEntity = PostEntity.create(request.getTitle(), request.getAuthor(), encodedPassword, request.getContent());
 		return postRepository.save(postEntity);
 	}
 
@@ -37,7 +41,7 @@ public class PostService {
 		PostEntity postEntity = postRepository.findById(postId)
 				.orElseThrow(() -> new IllegalArgumentException("Post not found"));
 
-		if (!validatePassword(request.getPassword(), postEntity.getPassword())) {
+		if (!checkPassword(request.getPassword(), postEntity.getPassword())) {
 			throw new IllegalArgumentException("Wrong password");
 		}
 		postEntity.update(request.getTitle(), request.getContent());
@@ -48,7 +52,7 @@ public class PostService {
 		postRepository.findPasswordById(postId)
 				.ifPresentOrElse(
 						dbPassword -> {
-							if (!validatePassword(dbPassword, password)) {
+							if (!checkPassword(password, dbPassword)) {
 								throw new IllegalArgumentException("Wrong password");
 							}
 							postRepository.deleteById(postId);

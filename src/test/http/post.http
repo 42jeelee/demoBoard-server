@@ -20,7 +20,7 @@ POST http://localhost:8080/posts
 Content-Type: application/json
 
 {
-  "title": "hello",
+  "title": "",
   "author": "hhhh",
   "password": "@2aaaAa",
   "content": ""
@@ -46,7 +46,7 @@ Content-Type: application/json
   "content": "Oh!good!"
 }
 
-### DELETE post from server
-DELETE http://localhost:8080/posts/2
+### PUT delete post from server
+PUT http://localhost:8080/posts/2/delete
 
 @Aaaaaa2
