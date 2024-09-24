@@ -11,12 +11,33 @@ Content-Type: application/json
 {
   "title": "hello",
   "author": "hhhh",
-  "password": "@2aaaa",
+  "password": "@Aaaaaa2",
   "content": ""
 }
 
-### PATCH update post from server
-PATCH http://localhost:8080/posts/2
+### POST post from server (Wrong case)
+POST http://localhost:8080/posts
+Content-Type: application/json
+
+{
+  "title": "hello",
+  "author": "hhhh",
+  "password": "@2aaaAa",
+  "content": ""
+}
+
+### PUT update post from server
+PUT http://localhost:8080/posts/2
+Content-Type: application/json
+
+{
+  "title": "world!",
+  "password": "@Aaaaaa2",
+  "content": "Oh!good!"
+}
+
+### PUT update post from server(Wrong case)
+PUT http://localhost:8080/posts/2
 Content-Type: application/json
 
 {
@@ -26,4 +47,6 @@ Content-Type: application/json
 }
 
 ### DELETE post from server
-DELETE http://localhost:8080/posts/1
+DELETE http://localhost:8080/posts/2
+
+@Aaaaaa2

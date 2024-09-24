@@ -1,7 +1,6 @@
 package kr.co.jeelee.demoboard.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -30,34 +29,25 @@ public class PostController {
 
 	@GetMapping("/{postId}")
 	public ResponseEntity<PostEntity> getPostById(@Min(1) @PathVariable Long postId) {
-		Optional<PostEntity> post = postService.findById(postId);
-		return post.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+		PostEntity postEntity = postService.findById(postId);
+		return ResponseEntity.ok(postEntity);
 	}
 
 	@PostMapping
-	public PostEntity createPost(@Valid @RequestBody PostCreateRequest post) {
-		PostEntity postEntity = PostEntity.create(post.getTitle(), post.getAuthor(), post.getPassword(), post.getContent());
-		return postService.save(postEntity);
+	public ResponseEntity<PostEntity> createPost(@Valid @RequestBody PostCreateRequest request) {
+		PostEntity postEntity = postService.create(request);
+		return ResponseEntity.ok(postEntity);
 	}
 
-	@PatchMapping("/{postId}")
-	public ResponseEntity<PostEntity> updatePost(@Min(1) @PathVariable Long postId, @Valid @RequestBody PostUpdateRequest newPost) {
-		return postService.findById(postId)
-			.map(existingPost -> {
-				existingPost.setTitle(newPost.getTitle());
-				existingPost.setContent(newPost.getContent());
-				return ResponseEntity.ok(postService.save(existingPost));
-			})
-			.orElseGet(() -> ResponseEntity.notFound().build());
+	@PutMapping("/{postId}")
+	public ResponseEntity<PostEntity> updatePost(@Min(1) @PathVariable Long postId, @Valid @RequestBody PostUpdateRequest request) {
+		PostEntity postEntity = postService.updateById(postId, request);
+		return ResponseEntity.ok(postEntity);
 	}
 
 	@DeleteMapping("/{postId}")
-	public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
-		return postService.findById(postId)
-			.map(post -> {
-				postService.deleteById(postId);
-				return ResponseEntity.ok().<Void>build();
-			})
-			.orElseGet(() -> ResponseEntity.notFound().build());
+	public ResponseEntity<Void> deletePost(@PathVariable Long postId, @RequestBody String password) {
+		postService.deleteById(postId, password);
+		return ResponseEntity.noContent().build();
 	}
 }

@@ -5,15 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Entity
-@Table(name = "post")
+@Entity(name = "POST")
 @NoArgsConstructor
-@Getter @Setter
+@Getter
 public class PostEntity extends BaseTimeEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,5 +36,10 @@ public class PostEntity extends BaseTimeEntity {
 
 	public static PostEntity create(String title, String author, String password, String content) {
 		return new PostEntity(title, author, password, content);
+	}
+
+	public void update(String title, String content) {
+		this.title = title;
+		this.content = content;
 	}
 }
