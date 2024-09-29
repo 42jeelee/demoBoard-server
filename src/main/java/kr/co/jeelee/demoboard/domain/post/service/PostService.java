@@ -7,13 +7,17 @@ import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
 import kr.co.jeelee.demoboard.domain.post.dao.PostRepository;
+import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
+import kr.co.jeelee.demoboard.global.exception.custom.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PostService {
 
 	private final PostRepository postRepository;
@@ -28,7 +32,7 @@ public class PostService {
 	}
 
 	public PostEntity findById(Long id) {
-		return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post not found"));
+		return postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 	}
 
 	public PostEntity create(PostCreateRequest request) {
@@ -39,10 +43,10 @@ public class PostService {
 
 	public PostEntity updateById(Long postId, PostUpdateRequest request) {
 		PostEntity postEntity = postRepository.findById(postId)
-				.orElseThrow(() -> new IllegalArgumentException("Post not found"));
+				.orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
 		if (!checkPassword(request.getPassword(), postEntity.getPassword())) {
-			throw new IllegalArgumentException("Wrong password");
+			throw new CustomException(ErrorCode.POST_PASSWORD_MISMATCH);
 		}
 		postEntity.update(request.getTitle(), request.getContent());
 		return postRepository.save(postEntity);
@@ -53,11 +57,11 @@ public class PostService {
 				.ifPresentOrElse(
 						dbPassword -> {
 							if (!checkPassword(password, dbPassword)) {
-								throw new IllegalArgumentException("Wrong password");
+								throw new CustomException(ErrorCode.POST_PASSWORD_MISMATCH);
 							}
 							postRepository.deleteById(postId);
 						},
-						() -> { throw new IllegalArgumentException("Post not found"); }
+						() -> { throw new CustomException((ErrorCode.POST_NOT_FOUND)); }
 				);
 	}
 }
