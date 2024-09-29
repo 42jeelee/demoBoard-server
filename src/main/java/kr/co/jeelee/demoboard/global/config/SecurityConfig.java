@@ -1,4 +1,4 @@
-package kr.co.jeelee.demoboard.config;
+package kr.co.jeelee.demoboard.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

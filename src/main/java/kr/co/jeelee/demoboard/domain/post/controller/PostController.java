@@ -1,18 +1,18 @@
-package kr.co.jeelee.demoboard.controller;
+package kr.co.jeelee.demoboard.domain.post.controller;
 
 import java.util.List;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import kr.co.jeelee.demoboard.request.PostUpdateRequest;
+import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import kr.co.jeelee.demoboard.entity.PostEntity;
-import kr.co.jeelee.demoboard.request.PostCreateRequest;
-import kr.co.jeelee.demoboard.service.PostService;
+import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
+import kr.co.jeelee.demoboard.domain.post.dto.request.PostCreateRequest;
+import kr.co.jeelee.demoboard.domain.post.service.PostService;
 
 @RestController
 @RequestMapping("/posts")

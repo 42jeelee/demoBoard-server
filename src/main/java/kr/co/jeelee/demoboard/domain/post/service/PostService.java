@@ -1,15 +1,15 @@
-package kr.co.jeelee.demoboard.service;
+package kr.co.jeelee.demoboard.domain.post.service;
 
 import java.util.List;
 
-import kr.co.jeelee.demoboard.request.PostCreateRequest;
-import kr.co.jeelee.demoboard.request.PostUpdateRequest;
+import kr.co.jeelee.demoboard.domain.post.dto.request.PostCreateRequest;
+import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import kr.co.jeelee.demoboard.entity.PostEntity;
-import kr.co.jeelee.demoboard.repository.PostRepository;
+import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
+import kr.co.jeelee.demoboard.domain.post.dao.PostRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

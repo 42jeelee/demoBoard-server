@@ -1,4 +1,4 @@
-package kr.co.jeelee.demoboard.entity;
+package kr.co.jeelee.demoboard.global.entity;
 
 import java.time.LocalDateTime;
 

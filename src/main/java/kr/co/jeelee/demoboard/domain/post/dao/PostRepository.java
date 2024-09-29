@@ -1,8 +1,8 @@
-package kr.co.jeelee.demoboard.repository;
+package kr.co.jeelee.demoboard.domain.post.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import kr.co.jeelee.demoboard.entity.PostEntity;
+import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

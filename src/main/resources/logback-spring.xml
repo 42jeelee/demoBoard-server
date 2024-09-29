@@ -12,7 +12,7 @@
         <appender-ref ref="CONSOLE" />
     </root>
 
-    <logger name="kr.co.jeelee.demoboard.controller.MainController" level="DEBUG" additive="false" additivity="false">
+    <logger name="kr.co.jeelee.demoboard.global.controller.TestController" level="DEBUG" additive="false" additivity="false">
         <appender-ref ref="CONSOLE" />
     </logger>
 </configuration>

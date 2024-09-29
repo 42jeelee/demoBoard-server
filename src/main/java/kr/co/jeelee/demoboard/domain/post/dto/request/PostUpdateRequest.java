@@ -1,4 +1,4 @@
-package kr.co.jeelee.demoboard.request;
+package kr.co.jeelee.demoboard.domain.post.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

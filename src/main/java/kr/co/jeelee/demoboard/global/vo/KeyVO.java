@@ -1,4 +1,4 @@
-package kr.co.jeelee.demoboard.vo;
+package kr.co.jeelee.demoboard.global.vo;
 
 import lombok.Data;
 

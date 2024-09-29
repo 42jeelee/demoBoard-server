@@ -1,4 +1,4 @@
-package kr.co.jeelee.demoboard.exception;
+package kr.co.jeelee.demoboard.global.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
