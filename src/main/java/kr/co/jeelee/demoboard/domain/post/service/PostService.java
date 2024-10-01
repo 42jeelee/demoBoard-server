@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.jeelee.demoboard.domain.post.dto.response.PostDetailResponse;
+import kr.co.jeelee.demoboard.domain.post.dto.response.PostSummaryResponse;
 import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
 import kr.co.jeelee.demoboard.domain.post.dao.PostRepository;
 import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
@@ -27,21 +29,28 @@ public class PostService {
 		return passwordEncoder.matches(password, dbPassword);
 	}
 
-	public List<PostEntity> findAll() {
-		return postRepository.findAll();
+	public List<PostSummaryResponse> findAll() {
+		return postRepository.findAll()
+			.stream()
+			.map(PostSummaryResponse::of)
+			.toList();
 	}
 
-	public PostEntity findById(Long id) {
-		return postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+	public PostDetailResponse findById(Long id) {
+		return postRepository.findById(id)
+			.map(PostDetailResponse::of)
+			.orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 	}
 
-	public PostEntity create(PostCreateRequest request) {
+	@Transactional
+	public PostDetailResponse create(PostCreateRequest request) {
 		String encodedPassword = passwordEncoder.encode(request.getPassword());
 		PostEntity postEntity = PostEntity.create(request.getTitle(), request.getAuthor(), encodedPassword, request.getContent());
-		return postRepository.save(postEntity);
+		return PostDetailResponse.of(postRepository.save(postEntity));
 	}
 
-	public PostEntity updateById(Long postId, PostUpdateRequest request) {
+	@Transactional
+	public PostDetailResponse updateById(Long postId, PostUpdateRequest request) {
 		PostEntity postEntity = postRepository.findById(postId)
 				.orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
@@ -49,9 +58,10 @@ public class PostService {
 			throw new CustomException(ErrorCode.POST_PASSWORD_MISMATCH);
 		}
 		postEntity.update(request.getTitle(), request.getContent());
-		return postRepository.save(postEntity);
+		return PostDetailResponse.of(postRepository.save(postEntity));
 	}
 
+	@Transactional
 	public void deleteById(Long postId, String password) {
 		postRepository.findPasswordById(postId)
 				.ifPresentOrElse(

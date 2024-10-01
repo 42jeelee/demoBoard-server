@@ -5,12 +5,13 @@ import java.util.List;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
+import kr.co.jeelee.demoboard.domain.post.dto.response.PostDetailResponse;
+import kr.co.jeelee.demoboard.domain.post.dto.response.PostSummaryResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostCreateRequest;
 import kr.co.jeelee.demoboard.domain.post.service.PostService;
 
@@ -23,31 +24,27 @@ public class PostController {
 	private final PostService postService;
 
 	@GetMapping
-	public List<PostEntity> getPosts() {
+	public List<PostSummaryResponse> getPosts() {
 		return postService.findAll();
 	}
 
 	@GetMapping("/{postId}")
-	public ResponseEntity<PostEntity> getPostById(@Min(1) @PathVariable Long postId) {
-		PostEntity postEntity = postService.findById(postId);
-		return ResponseEntity.ok(postEntity);
+	public PostDetailResponse getPostById(@Min(1) @PathVariable Long postId) {
+		return postService.findById(postId);
 	}
 
 	@PostMapping
-	public ResponseEntity<PostEntity> createPost(@Valid @RequestBody PostCreateRequest request) {
-		PostEntity postEntity = postService.create(request);
-		return ResponseEntity.ok(postEntity);
+	public PostDetailResponse createPost(@Valid @RequestBody PostCreateRequest request) {
+		return postService.create(request);
 	}
 
 	@PutMapping("/{postId}")
-	public ResponseEntity<PostEntity> updatePost(@Min(1) @PathVariable Long postId, @Valid @RequestBody PostUpdateRequest request) {
-		PostEntity postEntity = postService.updateById(postId, request);
-		return ResponseEntity.ok(postEntity);
+	public PostDetailResponse updatePost(@Min(1) @PathVariable Long postId, @Valid @RequestBody PostUpdateRequest request) {
+		return postService.updateById(postId, request);
 	}
 
 	@PutMapping("/{postId}/delete")
-	public ResponseEntity<Void> deletePost(@PathVariable Long postId, @RequestBody String password) {
+	public void deletePost(@PathVariable Long postId, @RequestBody String password) {
 		postService.deleteById(postId, password);
-		return ResponseEntity.noContent().build();
 	}
 }
