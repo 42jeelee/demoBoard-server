@@ -2,7 +2,7 @@
 GET http://localhost:8080/test
 
 ### GET posts from server
-GET http://localhost:8080/posts
+GET http://localhost:8080/posts?page=0&size=5&sort=dsdfs,dsf&sort=createdAt,dc&sort=updatedAt,c&sort=wrong,d
 
 ### POST post from server
 POST http://localhost:8080/posts

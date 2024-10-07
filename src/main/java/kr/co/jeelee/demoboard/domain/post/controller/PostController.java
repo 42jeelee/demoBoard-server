@@ -7,8 +7,12 @@ import jakarta.validation.constraints.Min;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostDetailResponse;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostSummaryResponse;
+import kr.co.jeelee.demoboard.global.annotation.AllowedSortFields;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,15 +21,16 @@ import kr.co.jeelee.demoboard.domain.post.service.PostService;
 
 @RestController
 @RequestMapping("/posts")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Validated
 public class PostController {
 
 	private final PostService postService;
 
 	@GetMapping
-	public List<PostSummaryResponse> getPosts() {
-		return postService.findAll();
+	@AllowedSortFields({"createdAt", "updatedAt"})
+	public List<PostSummaryResponse> getPosts(@PageableDefault(size = 5) Pageable pageable) {
+		return postService.findAll(pageable);
 	}
 
 	@GetMapping("/{postId}")
