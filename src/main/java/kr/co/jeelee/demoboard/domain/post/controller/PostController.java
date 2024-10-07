@@ -8,7 +8,6 @@ import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostDetailResponse;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostSummaryResponse;
 import kr.co.jeelee.demoboard.global.annotation.AllowedSortFields;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Pageable;
@@ -21,7 +20,7 @@ import kr.co.jeelee.demoboard.domain.post.service.PostService;
 
 @RestController
 @RequestMapping("/posts")
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 @Validated
 public class PostController {
 
