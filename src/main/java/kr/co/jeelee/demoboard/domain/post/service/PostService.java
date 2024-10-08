@@ -37,7 +37,11 @@ public class PostService {
 			.toList();
 	}
 
+	@Transactional
 	public PostDetailResponse findById(Long id) {
+
+		postRepository.incrementViews(id);
+
 		return postRepository.findById(id)
 			.map(PostDetailResponse::of)
 			.orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
