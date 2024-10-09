@@ -5,7 +5,10 @@ import java.util.List;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostCreateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,17 +17,20 @@ import kr.co.jeelee.demoboard.domain.post.dto.response.PostDetailResponse;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostSummaryResponse;
 import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
 import kr.co.jeelee.demoboard.domain.post.dao.PostRepository;
+import kr.co.jeelee.demoboard.domain.post.event.FindPostEvent;
 import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
 import kr.co.jeelee.demoboard.global.exception.custom.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@EnableAsync
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostService {
 
 	private final PostRepository postRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final ApplicationEventPublisher eventPublisher;
 
 	private boolean checkPassword(String password, String dbPassword) {
 		return passwordEncoder.matches(password, dbPassword);
@@ -37,10 +43,9 @@ public class PostService {
 			.toList();
 	}
 
-	@Transactional
 	public PostDetailResponse findById(Long id) {
 
-		postRepository.incrementViews(id);
+		eventPublisher.publishEvent(new FindPostEvent(id));
 
 		return postRepository.findById(id)
 			.map(PostDetailResponse::of)
@@ -78,5 +83,11 @@ public class PostService {
 						},
 						() -> { throw new CustomException((ErrorCode.POST_NOT_FOUND)); }
 				);
+	}
+
+	@Async
+	@Transactional
+	public void increaseViewsById(Long postId) {
+		postRepository.incrementViews(postId);
 	}
 }
