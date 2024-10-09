@@ -14,6 +14,7 @@ public class PostDetailResponse {
 	private final String title;
 	private final String author;
 	private final String content;
+	private final Long views;
 	private final LocalDateTime updatedAt;
 	private final LocalDateTime createdAt;
 
@@ -23,6 +24,7 @@ public class PostDetailResponse {
 			postEntity.getTitle(),
 			postEntity.getAuthor(),
 			postEntity.getContent(),
+			postEntity.getViews(),
 			postEntity.getUpdatedAt(),
 			postEntity.getCreatedAt()
 		);

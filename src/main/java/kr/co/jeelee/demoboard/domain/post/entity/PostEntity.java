@@ -28,14 +28,18 @@ public class PostEntity extends BaseTimeEntity {
 	@Column
 	private String content;
 
+	@Column(nullable = false)
+	private Long views;
+
 	private PostEntity(String title, String author, String password, String content) {
 		this.title = title;
 		this.author = author;
 		this.password = password;
 		this.content = content;
+		this.views = 0L;
 	}
 
-	public static PostEntity create(String title, String author, String password, String content) {
+	public static PostEntity of(String title, String author, String password, String content) {
 		return new PostEntity(title, author, password, content);
 	}
 
