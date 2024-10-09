@@ -55,7 +55,7 @@ public class PostService {
 	@Transactional
 	public PostDetailResponse create(PostCreateRequest request) {
 		String encodedPassword = passwordEncoder.encode(request.getPassword());
-		PostEntity postEntity = PostEntity.create(request.getTitle(), request.getAuthor(), encodedPassword, request.getContent());
+		PostEntity postEntity = PostEntity.of(request.getTitle(), request.getAuthor(), encodedPassword, request.getContent());
 		return PostDetailResponse.of(postRepository.save(postEntity));
 	}
 

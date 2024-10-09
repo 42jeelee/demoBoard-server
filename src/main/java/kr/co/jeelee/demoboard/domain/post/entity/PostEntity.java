@@ -39,7 +39,7 @@ public class PostEntity extends BaseTimeEntity {
 		this.views = 0L;
 	}
 
-	public static PostEntity create(String title, String author, String password, String content) {
+	public static PostEntity of(String title, String author, String password, String content) {
 		return new PostEntity(title, author, password, content);
 	}
 
