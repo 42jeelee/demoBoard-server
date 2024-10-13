@@ -9,13 +9,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
+import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity(name = "Comment")
 @NoArgsConstructor
 @Getter
-public class CommentEntity {
+public class CommentEntity extends BaseTimeEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long commentId;

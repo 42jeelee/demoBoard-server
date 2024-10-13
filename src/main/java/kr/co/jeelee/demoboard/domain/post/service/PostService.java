@@ -2,6 +2,9 @@ package kr.co.jeelee.demoboard.domain.post.service;
 
 import java.util.List;
 
+import kr.co.jeelee.demoboard.domain.category.dao.CategoryRepository;
+import kr.co.jeelee.demoboard.domain.category.entity.CategoryEntity;
+import kr.co.jeelee.demoboard.domain.category.service.CategoryService;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostCreateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 
@@ -29,6 +32,9 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
 
 	private final PostRepository postRepository;
+
+	private final CategoryRepository categoryRepository;
+
 	private final PasswordEncoder passwordEncoder;
 	private final ApplicationEventPublisher eventPublisher;
 
@@ -55,7 +61,8 @@ public class PostService {
 	@Transactional
 	public PostDetailResponse create(PostCreateRequest request) {
 		String encodedPassword = passwordEncoder.encode(request.getPassword());
-		PostEntity postEntity = PostEntity.of(request.getTitle(), request.getAuthor(), encodedPassword, request.getContent());
+		CategoryEntity category = categoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+		PostEntity postEntity = PostEntity.of(request.getTitle(), request.getAuthor(), encodedPassword, category, request.getContent());
 		return PostDetailResponse.of(postRepository.save(postEntity));
 	}
 
