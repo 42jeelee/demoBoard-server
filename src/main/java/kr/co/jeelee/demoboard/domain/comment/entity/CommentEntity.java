@@ -1,6 +1,5 @@
 package kr.co.jeelee.demoboard.domain.comment.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +26,7 @@ public class CommentEntity extends BaseTimeEntity {
 	@Column(nullable = false)
 	private String content;
 
-	@ManyToOne(cascade = CascadeType.REMOVE)
+	@ManyToOne
 	@JoinColumn(nullable = false)
 	private PostEntity post;
 

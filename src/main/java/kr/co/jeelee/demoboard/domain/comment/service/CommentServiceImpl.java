@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
         if (!commentEntity.getPost().getPostId().equals(postId)) {
-            throw new CustomException(ErrorCode.POST_NOT_FOUND);
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
         }
 
         commentRepository.delete(commentEntity);

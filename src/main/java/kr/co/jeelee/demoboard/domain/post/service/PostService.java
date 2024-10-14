@@ -4,7 +4,6 @@ import java.util.List;
 
 import kr.co.jeelee.demoboard.domain.category.dao.CategoryRepository;
 import kr.co.jeelee.demoboard.domain.category.entity.CategoryEntity;
-import kr.co.jeelee.demoboard.domain.category.service.CategoryService;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostCreateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 

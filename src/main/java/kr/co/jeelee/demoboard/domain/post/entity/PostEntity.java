@@ -1,5 +1,7 @@
 package kr.co.jeelee.demoboard.domain.post.entity;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,7 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import kr.co.jeelee.demoboard.domain.category.entity.CategoryEntity;
+import kr.co.jeelee.demoboard.domain.comment.entity.CommentEntity;
 import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,9 +33,12 @@ public class PostEntity extends BaseTimeEntity {
 
 	private String password;
 
-	@ManyToOne(cascade = CascadeType.REMOVE)
+	@ManyToOne
 	@JoinColumn(nullable = false)
 	private CategoryEntity category;
+
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+	private List<CommentEntity> comments;
 
 	@Column
 	private String content;
