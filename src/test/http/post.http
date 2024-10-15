@@ -12,10 +12,10 @@ POST http://localhost:8080/posts
 Content-Type: application/json
 
 {
-  "title": "hello",
+  "title": "hello2",
   "author": "hhhh",
+  "categoryId": 4,
   "password": "@Aaaaaa2",
-  "categoryId": 1,
   "content": ""
 }
 
@@ -51,15 +51,30 @@ Content-Type: application/json
 }
 
 ### PUT delete post from server
-PUT http://localhost:8080/posts/4/delete
+PUT http://localhost:8080/posts/1/delete
 
-@Aaaaaa2
+### GET comment from post
+GET http://localhost:8080/posts/4/comments
+
+### POST comment from post
+POST http://localhost:8080/posts/4/comments
+Content-Type: application/json
+
+{
+  "author": "jeelee",
+  "content": "안녕하세요~"
+}
+### DELETE comment from post
+DELETE http://localhost:8080/posts/1/comments/1
+
+### GET CATEGORIES
+GET http://localhost:8080/categories
 
 ### GET CATEGORY
-GET http://localhost:8080/category
+GET http://localhost:8080/categories/1
 
 ### GET COMMENT
-GET http://localhost:8080/posts/4/comments
+GET http://localhost:8080/posts/1/comments
 
 ### POST COMMENT
 POST http://localhost:8080/posts/9/comments
@@ -71,4 +86,4 @@ Content-Type: application/json
 }
 
 ### DELETE COMMENT
-DELETE http://localhost:8080/posts/2/comments/2
+DELETE http://localhost:8080/posts/1/comments/2

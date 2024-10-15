@@ -12,7 +12,7 @@ import kr.co.jeelee.demoboard.domain.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
