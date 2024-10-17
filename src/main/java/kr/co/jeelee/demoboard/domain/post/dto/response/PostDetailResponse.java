@@ -13,6 +13,7 @@ public class PostDetailResponse {
 	private final Long id;
 	private final String title;
 	private final String author;
+	private final Long categoryId;
 	private final String content;
 	private final Long views;
 	private final LocalDateTime updatedAt;
@@ -23,6 +24,7 @@ public class PostDetailResponse {
 			postEntity.getPostId(),
 			postEntity.getTitle(),
 			postEntity.getAuthor(),
+			postEntity.getCategory().getCategoryId(),
 			postEntity.getContent(),
 			postEntity.getViews(),
 			postEntity.getUpdatedAt(),
