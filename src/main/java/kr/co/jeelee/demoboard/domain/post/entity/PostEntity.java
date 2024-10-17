@@ -1,7 +1,5 @@
 package kr.co.jeelee.demoboard.domain.post.entity;
 
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,6 +14,8 @@ import kr.co.jeelee.demoboard.domain.comment.entity.CommentEntity;
 import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity(name = "POST")
 @NoArgsConstructor

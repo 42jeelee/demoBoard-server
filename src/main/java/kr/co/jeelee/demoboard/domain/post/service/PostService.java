@@ -9,8 +9,6 @@ import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +23,6 @@ import kr.co.jeelee.demoboard.global.exception.custom.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@EnableAsync
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostService {
@@ -60,8 +57,10 @@ public class PostService {
 	@Transactional
 	public PostDetailResponse create(PostCreateRequest request) {
 		String encodedPassword = passwordEncoder.encode(request.getPassword());
-		CategoryEntity category = categoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
-		PostEntity postEntity = PostEntity.of(request.getTitle(), request.getAuthor(), encodedPassword, category, request.getContent());
+		CategoryEntity categoryEntity = categoryRepository.findById(request.getCategoryId())
+				.orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+
+		PostEntity postEntity = PostEntity.of(request.getTitle(), request.getAuthor(), encodedPassword, categoryEntity, request.getContent());
 		return PostDetailResponse.of(postRepository.save(postEntity));
 	}
 
@@ -91,7 +90,6 @@ public class PostService {
 				);
 	}
 
-	@Async
 	@Transactional
 	public void increaseViewsById(Long postId) {
 		postRepository.incrementViews(postId);

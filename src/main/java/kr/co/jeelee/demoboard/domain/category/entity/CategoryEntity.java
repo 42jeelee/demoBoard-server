@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
 import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
