@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+
 import kr.co.jeelee.demoboard.domain.category.entity.CategoryEntity;
 import kr.co.jeelee.demoboard.domain.comment.entity.CommentEntity;
 import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
