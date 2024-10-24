@@ -12,12 +12,12 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
 
-    @Query(value = "SELECT p.password FROM POST p WHERE p.postId = :postId")
+    @Query(value = "SELECT p.password FROM POST p WHERE p.id = :postId")
     Optional<String> findPasswordById(@Param("postId") Long postId);
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE POST p SET p.views = p.views + 1 WHERE p.postId = :postId")
+    @Query(value = "UPDATE POST p SET p.views = p.views + 1 WHERE p.id = :postId")
     void incrementViews(@Param("postId") Long postId);
 
 }

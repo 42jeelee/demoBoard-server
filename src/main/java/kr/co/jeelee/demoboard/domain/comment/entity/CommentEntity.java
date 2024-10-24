@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class CommentEntity extends BaseTimeEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long commentId;
+	private Long id;
 
 	@Column(nullable = false)
 	private String author;
@@ -27,7 +27,7 @@ public class CommentEntity extends BaseTimeEntity {
 	private String content;
 
 	@ManyToOne
-	@JoinColumn(nullable = false)
+	@JoinColumn(name = "post_id", nullable = false)
 	private PostEntity post;
 
 	private CommentEntity(String author, String content, PostEntity post) {
