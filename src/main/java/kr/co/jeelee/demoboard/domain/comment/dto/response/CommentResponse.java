@@ -17,7 +17,7 @@ public class CommentResponse {
 
     public static CommentResponse of(CommentEntity commentEntity) {
         return new CommentResponse(
-                commentEntity.getCommentId(),
+                commentEntity.getId(),
                 commentEntity.getContent(),
                 commentEntity.getAuthor(),
                 commentEntity.getCreatedAt()

@@ -24,7 +24,7 @@ import java.util.List;
 public class PostEntity extends BaseTimeEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private Long postId;
+	private Long id;
 
 	@Column(nullable = false)
 	private String title;
@@ -35,7 +35,7 @@ public class PostEntity extends BaseTimeEntity {
 	private String password;
 
 	@ManyToOne
-	@JoinColumn(nullable = false)
+	@JoinColumn(name = "category_id", nullable = false)
 	private CategoryEntity category;
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)

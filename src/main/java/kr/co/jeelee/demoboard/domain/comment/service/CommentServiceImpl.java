@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity commentEntity = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
-        if (!commentEntity.getPost().getPostId().equals(postId)) {
+        if (!commentEntity.getPost().getId().equals(postId)) {
             throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
         }
 

@@ -15,15 +15,13 @@ import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity(name = "CATEGORY")
 @NoArgsConstructor
 @Getter
 public class CategoryEntity extends BaseTimeEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long categoryId;
+	private Long id;
 
 	@Column(nullable = false, unique = true)
 	private String name;

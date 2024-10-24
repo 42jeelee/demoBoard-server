@@ -17,7 +17,7 @@ public class PostSummaryResponse {
 
 	public static PostSummaryResponse of(PostEntity postEntity) {
 		return new PostSummaryResponse(
-			postEntity.getPostId(),
+			postEntity.getId(),
 			postEntity.getTitle(),
 			postEntity.getAuthor(),
 			postEntity.getCreatedAt()

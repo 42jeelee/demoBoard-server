@@ -6,9 +6,8 @@ import kr.co.jeelee.demoboard.domain.category.dto.response.CategoryResponse;
 
 public interface CategoryService {
 
-	List<CategoryResponse> findAll();
+	List<CategoryResponse> findAll(boolean isPostCount);
 
-	CategoryResponse findById(Long id);
+	CategoryResponse findById(Long id, boolean isPostCount);
 
-	Long countPostByCategoryId(Long id);
 }
