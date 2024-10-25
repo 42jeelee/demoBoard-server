@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
         PostEntity postEntity = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        CommentEntity commentEntity = CommentEntity.of(request.getAuthor(), request.getContent(), postEntity);
+        CommentEntity commentEntity = CommentEntity.of(request.author(), request.content(), postEntity);
         return CommentResponse.of(commentRepository.save(commentEntity));
     }
 
