@@ -2,6 +2,7 @@ package kr.co.jeelee.demoboard.domain.category.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -19,23 +20,17 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<CategoryResponse> findAll(final boolean isPostCount) {
-		Map<Long, Long> countPostByCategoryId;
-
-		if (isPostCount) {
-			countPostByCategoryId = categoryRepository.countPostByCategoryId().stream()
+		Map<Long, Long> countPostByCategoryId = isPostCount
+			? categoryRepository.countPostByCategoryId().stream()
 				.collect(Collectors.toMap(
 					result -> (Long) result[0],
 					result -> (Long) result[1]
-				));
-		} else {
-			countPostByCategoryId = null;
-		}
+				))
+			: Collections.emptyMap();
 
 		return categoryRepository.findAll().stream()
 			.map(categoryEntity -> {
-				Long postCount = isPostCount
-					? countPostByCategoryId.get(categoryEntity.getId())
-					: null;
+				Long postCount = countPostByCategoryId.get(categoryEntity.getId());
 
 				return CategoryResponse.of(categoryEntity, postCount);
 			}).toList();
@@ -43,23 +38,11 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public CategoryResponse findById(final Long id, final boolean isPostCount) {
-		Map<Long, Long> countPostByCategoryId;
-
-		if (isPostCount) {
-			countPostByCategoryId = categoryRepository.countPostByCategoryId().stream()
-				.collect(Collectors.toMap(
-					result -> (Long) result[0],
-					result -> (Long) result[1]
-				));
-		} else {
-			countPostByCategoryId = null;
-		}
 
 		return categoryRepository.findById(id)
 			.map(categoryEntity -> {
 				final Long postCount = isPostCount
-					? countPostByCategoryId.get(categoryEntity.getId())
-					: null;
+				? categoryRepository.countPostByCategoryId(id) : null;
 
 				return CategoryResponse.of(categoryEntity, postCount);
 			})
