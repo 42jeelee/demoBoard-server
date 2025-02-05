@@ -9,16 +9,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
+import jakarta.persistence.Table;
+import kr.co.jeelee.demoboard.domain.post.entity.Post;
 import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "CATEGORY")
+@Entity
+@Table(name = "category")
 @NoArgsConstructor
 @Getter
-public class CategoryEntity extends BaseTimeEntity {
+public class Category extends BaseTimeEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -27,6 +29,6 @@ public class CategoryEntity extends BaseTimeEntity {
 	private String name;
 
 	@OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
-	private List<PostEntity> posts;
+	private List<Post> posts;
 
 }

@@ -18,6 +18,8 @@ public interface PostService {
 
     PostDetailResponse updateById(Long postId, PostUpdateRequest request);
 
+    Long countPostByCategoryId(Long categoryId);
+
     void deleteById(Long postId, String password);
 
     void increaseViewsById(Long postId);

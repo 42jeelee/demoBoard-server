@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.jeelee.demoboard.domain.category.dao.CategoryRepository;
 import kr.co.jeelee.demoboard.domain.category.dto.response.CategoryResponse;
+import kr.co.jeelee.demoboard.domain.post.service.PostService;
 import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
 import kr.co.jeelee.demoboard.global.exception.custom.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
+
 	private final CategoryRepository categoryRepository;
+	private final PostService postService;
 
 	@Override
 	public List<CategoryResponse> findAll(final boolean isPostCount) {
@@ -32,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 			.map(categoryEntity -> {
 				Long postCount = countPostByCategoryId.get(categoryEntity.getId());
 
-				return CategoryResponse.of(categoryEntity, postCount);
+				return CategoryResponse.from(categoryEntity, postCount);
 			}).toList();
 	}
 
@@ -42,9 +45,9 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryRepository.findById(id)
 			.map(categoryEntity -> {
 				final Long postCount = isPostCount
-				? categoryRepository.countPostByCategoryId(id) : null;
+				? postService.countPostByCategoryId(id) : null;
 
-				return CategoryResponse.of(categoryEntity, postCount);
+				return CategoryResponse.from(categoryEntity, postCount);
 			})
 			.orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 	}

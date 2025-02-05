@@ -10,18 +10,20 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
-import kr.co.jeelee.demoboard.domain.category.entity.CategoryEntity;
-import kr.co.jeelee.demoboard.domain.comment.entity.CommentEntity;
+import jakarta.persistence.Table;
+import kr.co.jeelee.demoboard.domain.category.entity.Category;
+import kr.co.jeelee.demoboard.domain.comment.entity.Comment;
 import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity(name = "POST")
+@Entity
+@Table(name = "post")
 @NoArgsConstructor
 @Getter
-public class PostEntity extends BaseTimeEntity {
+public class Post extends BaseTimeEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -36,10 +38,10 @@ public class PostEntity extends BaseTimeEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)
-	private CategoryEntity category;
+	private Category category;
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-	private List<CommentEntity> comments;
+	private List<Comment> comments;
 
 	@Column
 	private String content;
@@ -47,7 +49,7 @@ public class PostEntity extends BaseTimeEntity {
 	@Column(nullable = false)
 	private Long views;
 
-	private PostEntity(String title, String author, String password, CategoryEntity category, String content) {
+	private Post(String title, String author, String password, Category category, String content) {
 		this.title = title;
 		this.author = author;
 		this.password = password;
@@ -56,8 +58,8 @@ public class PostEntity extends BaseTimeEntity {
 		this.views = 0L;
 	}
 
-	public static PostEntity of(String title, String author, String password, CategoryEntity category, String content) {
-		return new PostEntity(title, author, password, category, content);
+	public static Post of(String title, String author, String password, Category category, String content) {
+		return new Post(title, author, password, category, content);
 	}
 
 	public void update(String title, String content) {
