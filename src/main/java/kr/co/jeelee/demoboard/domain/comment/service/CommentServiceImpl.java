@@ -3,9 +3,9 @@ package kr.co.jeelee.demoboard.domain.comment.service;
 import kr.co.jeelee.demoboard.domain.comment.dao.CommentRepository;
 import kr.co.jeelee.demoboard.domain.comment.dto.request.CommentCreateRequest;
 import kr.co.jeelee.demoboard.domain.comment.dto.response.CommentResponse;
-import kr.co.jeelee.demoboard.domain.comment.entity.CommentEntity;
+import kr.co.jeelee.demoboard.domain.comment.entity.Comment;
 import kr.co.jeelee.demoboard.domain.post.dao.PostRepository;
-import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
+import kr.co.jeelee.demoboard.domain.post.entity.Post;
 import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
 import kr.co.jeelee.demoboard.global.exception.custom.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -24,34 +24,34 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentResponse> findAllByPostId(Long postId, Pageable pageable) {
-        PostEntity postEntity = postRepository.findById(postId)
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        return commentRepository.findByPost(postEntity, pageable).stream()
-                .map(CommentResponse::of)
+        return commentRepository.findByPost(post, pageable).stream()
+                .map(CommentResponse::from)
                 .toList();
     }
 
     @Override
     @Transactional
     public CommentResponse createByPostId(Long postId, CommentCreateRequest request) {
-        PostEntity postEntity = postRepository.findById(postId)
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        CommentEntity commentEntity = CommentEntity.of(request.author(), request.content(), postEntity);
-        return CommentResponse.of(commentRepository.save(commentEntity));
+        Comment comment = Comment.of(request.author(), request.content(), post);
+        return CommentResponse.from(commentRepository.save(comment));
     }
 
     @Override
     @Transactional
     public void deleteCommentById(Long postId, Long commentId) {
-        CommentEntity commentEntity = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
-        if (!commentEntity.getPost().getId().equals(postId)) {
+        if (!comment.getPost().getId().equals(postId)) {
             throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
         }
 
-        commentRepository.delete(commentEntity);
+        commentRepository.delete(comment);
     }
 }

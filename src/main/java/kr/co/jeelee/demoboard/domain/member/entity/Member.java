@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Entity(name = "MEMBER")
+@Entity
+@Table(name = "member")
 @NoArgsConstructor
 @Getter
 public class Member extends BaseTimeEntity {
@@ -27,14 +28,14 @@ public class Member extends BaseTimeEntity {
     @Column
     private String email;
 
-    private Member(String name, String nickname, String password, String email) {
+    private Member(String name, String nickname, String email, String password) {
         this.name = name;
         this.nickname = nickname;
-        this.password = password;
         this.email = email;
+        this.password = password;
     }
 
-    public static Member of(String name, String nickname, String password, String email) {
-        return new Member(name, nickname, password, email);
+    public static Member of(String name, String nickname, String email, String password) {
+        return new Member(name, nickname, email, password);
     }
 }

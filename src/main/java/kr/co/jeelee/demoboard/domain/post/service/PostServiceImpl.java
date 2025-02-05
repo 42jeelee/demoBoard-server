@@ -3,7 +3,7 @@ package kr.co.jeelee.demoboard.domain.post.service;
 import java.util.List;
 
 import kr.co.jeelee.demoboard.domain.category.dao.CategoryRepository;
-import kr.co.jeelee.demoboard.domain.category.entity.CategoryEntity;
+import kr.co.jeelee.demoboard.domain.category.entity.Category;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostCreateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostDetailResponse;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostSummaryResponse;
-import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
+import kr.co.jeelee.demoboard.domain.post.entity.Post;
 import kr.co.jeelee.demoboard.domain.post.dao.PostRepository;
 import kr.co.jeelee.demoboard.domain.post.event.FindPostEvent;
 import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
@@ -52,7 +52,7 @@ public class PostServiceImpl implements PostService {
 		eventPublisher.publishEvent(new FindPostEvent(id));
 
 		return postRepository.findById(id)
-			.map(PostDetailResponse::of)
+			.map(PostDetailResponse::from)
 			.orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 	}
 
@@ -60,24 +60,29 @@ public class PostServiceImpl implements PostService {
 	@Transactional
 	public PostDetailResponse create(PostCreateRequest request) {
 		String encodedPassword = passwordEncoder.encode(request.password());
-		CategoryEntity categoryEntity = categoryRepository.findById(request.categoryId())
+		Category category = categoryRepository.findById(request.categoryId())
 				.orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
-		PostEntity postEntity = PostEntity.of(request.title(), request.author(), encodedPassword, categoryEntity, request.content());
-		return PostDetailResponse.of(postRepository.save(postEntity));
+		Post post = Post.of(request.title(), request.author(), encodedPassword, category, request.content());
+		return PostDetailResponse.from(postRepository.save(post));
 	}
 
 	@Override
 	@Transactional
 	public PostDetailResponse updateById(Long postId, PostUpdateRequest request) {
-		PostEntity postEntity = postRepository.findById(postId)
+		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-		if (!checkPassword(request.password(), postEntity.getPassword())) {
+		if (!checkPassword(request.password(), post.getPassword())) {
 			throw new CustomException(ErrorCode.POST_PASSWORD_MISMATCH);
 		}
-		postEntity.update(request.title(), request.content());
-		return PostDetailResponse.of(postRepository.save(postEntity));
+		post.update(request.title(), request.content());
+		return PostDetailResponse.from(postRepository.save(post));
+	}
+
+	@Override
+	public Long countPostByCategoryId(Long categoryId) {
+		return postRepository.countPostByCategoryId(categoryId);
 	}
 
 	@Override

@@ -6,14 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import kr.co.jeelee.demoboard.domain.category.entity.CategoryEntity;
+import kr.co.jeelee.demoboard.domain.category.entity.Category;
 
-public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-	@Query(value = "SELECT c.id, COUNT(p.id) FROM CATEGORY c LEFT JOIN POST p ON c.id = p.category.id GROUP BY c.id")
+	@Query(value = "SELECT c.id, COUNT(p.id) FROM Category c LEFT JOIN Post p ON c.id = p.id GROUP BY c.id")
 	List<Object[]> countPostByCategoryId();
-
-	@Query("SELECT COUNT(p.id) FROM CATEGORY c LEFT JOIN POST p ON c.id = p.category.id WHERE c.id = :id")
-	Long countPostByCategoryId(@Param("id") Long id);
 
 }

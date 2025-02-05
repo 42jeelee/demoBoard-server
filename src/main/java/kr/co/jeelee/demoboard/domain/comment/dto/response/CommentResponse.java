@@ -1,16 +1,16 @@
 package kr.co.jeelee.demoboard.domain.comment.dto.response;
 
-import kr.co.jeelee.demoboard.domain.comment.entity.CommentEntity;
+import kr.co.jeelee.demoboard.domain.comment.entity.Comment;
 
 import java.time.LocalDateTime;
 
 public record CommentResponse (Long id, String content, String author, LocalDateTime createdAt) {
-    public static CommentResponse of(CommentEntity commentEntity) {
+    public static CommentResponse from(Comment comment) {
         return new CommentResponse(
-                commentEntity.getId(),
-                commentEntity.getContent(),
-                commentEntity.getAuthor(),
-                commentEntity.getCreatedAt()
+                comment.getId(),
+                comment.getContent(),
+                comment.getAuthor(),
+                comment.getCreatedAt()
         );
     }
 }

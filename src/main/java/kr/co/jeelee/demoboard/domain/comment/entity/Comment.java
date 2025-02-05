@@ -7,15 +7,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import kr.co.jeelee.demoboard.domain.post.entity.PostEntity;
+import jakarta.persistence.Table;
+import kr.co.jeelee.demoboard.domain.post.entity.Post;
 import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "Comment")
+@Entity
+@Table(name = "comment")
 @NoArgsConstructor
 @Getter
-public class CommentEntity extends BaseTimeEntity {
+public class Comment extends BaseTimeEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -28,16 +30,16 @@ public class CommentEntity extends BaseTimeEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "post_id", nullable = false)
-	private PostEntity post;
+	private Post post;
 
-	private CommentEntity(String author, String content, PostEntity post) {
+	private Comment(String author, String content, Post post) {
 		this.author = author;
 		this.content = content;
 		this.post = post;
 	}
 
-	public static CommentEntity of(String author, String content, PostEntity post) {
-		return new CommentEntity(author, content, post);
+	public static Comment of(String author, String content, Post post) {
+		return new Comment(author, content, post);
 	}
 
 }
