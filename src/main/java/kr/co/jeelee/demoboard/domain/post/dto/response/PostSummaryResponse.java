@@ -1,15 +1,20 @@
 package kr.co.jeelee.demoboard.domain.post.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+import kr.co.jeelee.demoboard.domain.member.dto.response.MemberSimpleResponse;
 import kr.co.jeelee.demoboard.domain.post.entity.Post;
 
-public record PostSummaryResponse(Long id, String title, String author, LocalDateTime createAt) {
-	public static PostSummaryResponse of(Post post) {
+public record PostSummaryResponse(
+		UUID id, String title,
+		MemberSimpleResponse author, LocalDateTime createAt
+) {
+	public static PostSummaryResponse from(Post post) {
 		return new PostSummaryResponse(
 				post.getId(),
 				post.getTitle(),
-				post.getAuthor(),
+				MemberSimpleResponse.from(post.getAuthor()),
 				post.getCreatedAt()
 		);
 	}

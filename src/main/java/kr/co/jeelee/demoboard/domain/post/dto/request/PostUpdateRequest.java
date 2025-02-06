@@ -1,9 +1,9 @@
 package kr.co.jeelee.demoboard.domain.post.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 public record PostUpdateRequest(
-        @NotBlank(message = "Title cannot be blank.") String title,
-        @NotBlank(message = "Password cannot be blank.") String password,
+        String title,
+        List<String> categories,
         String content
 ) {}

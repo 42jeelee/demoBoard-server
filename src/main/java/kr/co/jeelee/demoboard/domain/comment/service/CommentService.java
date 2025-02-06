@@ -5,13 +5,14 @@ import kr.co.jeelee.demoboard.domain.comment.dto.response.CommentResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CommentService {
 
-    List<CommentResponse> findAllByPostId(Long postId, Pageable pageable);
+    List<CommentResponse> findAllByPostId(UUID postId, Pageable pageable);
 
-    CommentResponse createByPostId(Long postId, CommentCreateRequest request);
+    CommentResponse createByPostId(UUID postId, CommentCreateRequest request);
 
-    void deleteCommentById(Long postId, Long commentId);
+    void deleteCommentById(UUID postId, UUID id);
 
 }

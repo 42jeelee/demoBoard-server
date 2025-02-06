@@ -1,6 +1,7 @@
 package kr.co.jeelee.demoboard.domain.post.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -33,7 +34,7 @@ public class PostController {
 	}
 
 	@GetMapping("/{postId}")
-	public PostDetailResponse getPostById(@Min(1) @PathVariable Long postId) {
+	public PostDetailResponse getPostById(@Min(1) @PathVariable UUID postId) {
 		return postService.findById(postId);
 	}
 
@@ -43,12 +44,12 @@ public class PostController {
 	}
 
 	@PutMapping("/{postId}")
-	public PostDetailResponse updatePost(@Min(1) @PathVariable Long postId, @Valid @RequestBody PostUpdateRequest request) {
+	public PostDetailResponse updatePost(@Min(1) @PathVariable UUID postId, @Valid @RequestBody PostUpdateRequest request) {
 		return postService.updateById(postId, request);
 	}
 
-	@PutMapping("/{postId}/delete")
-	public void deletePost(@PathVariable Long postId, @RequestBody String password) {
-		postService.deleteById(postId, password);
+	@DeleteMapping("/{postId}/delete")
+	public void deletePost(@PathVariable UUID postId) {
+		postService.deleteById(postId);
 	}
 }

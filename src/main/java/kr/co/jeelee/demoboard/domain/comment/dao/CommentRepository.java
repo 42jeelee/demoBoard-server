@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import kr.co.jeelee.demoboard.domain.comment.entity.Comment;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, UUID> {
 
     List<Comment> findByPost(Post post, Pageable pageable);
 }

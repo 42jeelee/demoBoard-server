@@ -7,21 +7,20 @@ import kr.co.jeelee.demoboard.domain.post.dto.response.PostSummaryResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface PostService {
 
     List<PostSummaryResponse> findAll(Pageable pageable);
 
-    PostDetailResponse findById(Long id);
+    PostDetailResponse findById(UUID id);
 
     PostDetailResponse create(PostCreateRequest request);
 
-    PostDetailResponse updateById(Long postId, PostUpdateRequest request);
+    PostDetailResponse updateById(UUID id, PostUpdateRequest request);
 
-    Long countPostByCategoryId(Long categoryId);
+    void deleteById(UUID id);
 
-    void deleteById(Long postId, String password);
-
-    void increaseViewsById(Long postId);
+    void increaseViewsById(UUID id);
 
 }
