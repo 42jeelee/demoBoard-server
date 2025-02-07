@@ -38,10 +38,9 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public List<PostSummaryResponse> findAll(Pageable pageable) {
-		return postRepository.findAll(pageable)
-			.stream()
-			.map(PostSummaryResponse::from)
-			.toList();
+		return postRepository.findAll(pageable).stream()
+				.map(PostSummaryResponse::from)
+				.toList();
 	}
 
 	@Override
@@ -50,8 +49,8 @@ public class PostServiceImpl implements PostService {
 		eventPublisher.publishEvent(new FindPostEvent(id));
 
 		return postRepository.findById(id)
-			.map(PostDetailResponse::from)
-			.orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+				.map(PostDetailResponse::from)
+				.orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 	}
 
 	@Override
@@ -60,28 +59,26 @@ public class PostServiceImpl implements PostService {
 		Category category = categoryUtil.getById(request.categoryId());
 		Member author = memberUtil.getById(request.authorId());
 
-		Post post = Post.of(request.title(), author, category, request.content());
+		Post post = Post.of(
+				request.title(),
+				author,
+				category,
+				request.content()
+		);
+
 		return PostDetailResponse.from(postRepository.save(post));
 	}
 
 	@Override
 	@Transactional
-	public PostDetailResponse updateById(UUID id, PostUpdateRequest request) {
-		Post post = postRepository.findById(id)
-				.orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-
-		post.update(request.title(), request.content());
-		return PostDetailResponse.from(postRepository.save(post));
+	public PostDetailResponse update(UUID id, PostUpdateRequest request) {
+		return null;
 	}
 
 	@Override
 	@Transactional
-	public void deleteById(UUID id) {
-		postRepository.findById(id)
-				.ifPresentOrElse(
-                        postRepository::delete,
-						() -> { throw new CustomException((ErrorCode.POST_NOT_FOUND)); }
-				);
+	public void delete(UUID id) {
+		postRepository.deleteById(id);
 	}
 
 	@Override

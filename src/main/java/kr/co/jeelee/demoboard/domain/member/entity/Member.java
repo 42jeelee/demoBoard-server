@@ -1,7 +1,7 @@
 package kr.co.jeelee.demoboard.domain.member.entity;
 
 import jakarta.persistence.*;
-import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
+import kr.co.jeelee.demoboard.global.entity.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "member")
 @NoArgsConstructor
 @Getter
-public class Member extends BaseTimeEntity {
+public class Member extends BaseEntity {
 
     @Column(nullable = false)
     private String name;

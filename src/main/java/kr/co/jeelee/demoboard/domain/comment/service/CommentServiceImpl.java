@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,8 +30,8 @@ public class CommentServiceImpl implements CommentService {
     private final MemberUtil memberUtil;
 
     @Override
-    public List<CommentResponse> findAllByPostId(UUID postId, Pageable pageable) {
-        Post post = postUtil.getById(postId);
+    public List<CommentResponse> findAllByParentId(UUID parentId, Pageable pageable) {
+        Post post = postUtil.getById(parentId);
 
         return commentRepository.findByPost(post, pageable).stream()
                 .map(CommentResponse::from)
@@ -38,25 +39,39 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public CommentResponse findById(UUID id) {
+        return commentRepository.findById(id)
+                .map(CommentResponse::from)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+    }
+
+    @Override
     @Transactional
-    public CommentResponse createByPostId(UUID postId, CommentCreateRequest request) {
-        Post post = postUtil.getById(postId);
+    public CommentResponse createByParentId(UUID parentId, CommentCreateRequest request) {
+        Post post = postUtil.getById(parentId);
         Member member = memberUtil.getById(request.authorId());
 
-        Comment comment = Comment.of(member, request.content(), post);
+        Comment comment = Comment.of(
+                member,
+                request.content(),
+                post
+        );
+
         return CommentResponse.from(commentRepository.save(comment));
     }
 
     @Override
     @Transactional
-    public void deleteCommentById(UUID postId, UUID id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+    public CommentResponse update(UUID id, String request) {
+        return null;
+    }
 
-        if (!comment.getPost().getId().equals(postId)) {
+    @Override
+    @Transactional
+    public void delete(UUID parentId, UUID id) {
+        if (!commentRepository.isInPost(parentId, id)) {
             throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
         }
-
-        commentRepository.delete(comment);
+        commentRepository.deleteById(id);
     }
 }

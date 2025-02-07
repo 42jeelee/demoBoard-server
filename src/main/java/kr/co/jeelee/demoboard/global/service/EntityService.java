@@ -5,15 +5,15 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.UUID;
 
-public interface EntityService<Q, S> {
+public interface EntityService<QCreate, QUpdate, SSimple, SDetail> {
 
-    List<S> findAll(Pageable pageable);
+    List<SSimple> findAll(Pageable pageable);
 
-    S findById(UUID id);
+    SDetail findById(UUID id);
 
-    S create(Q entity);
+    SDetail create(QCreate request);
 
-    S update(Q entity);
+    SDetail update(UUID id, QUpdate request);
 
     void delete(UUID id);
 }

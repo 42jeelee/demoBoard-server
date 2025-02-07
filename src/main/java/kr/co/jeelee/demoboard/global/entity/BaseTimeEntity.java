@@ -1,7 +1,6 @@
 package kr.co.jeelee.demoboard.global.entity;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,9 +13,6 @@ import lombok.Getter;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
-
-	@Id @GeneratedValue(strategy = GenerationType.UUID)
-	private UUID id;
 
 	@CreatedDate
 	private LocalDateTime createdAt;

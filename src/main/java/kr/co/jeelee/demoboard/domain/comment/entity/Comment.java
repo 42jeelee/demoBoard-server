@@ -1,29 +1,23 @@
 package kr.co.jeelee.demoboard.domain.comment.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import kr.co.jeelee.demoboard.domain.member.entity.Member;
 import kr.co.jeelee.demoboard.domain.post.entity.Post;
-import kr.co.jeelee.demoboard.global.entity.BaseTimeEntity;
+import kr.co.jeelee.demoboard.global.entity.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "comment")
 @NoArgsConstructor
 @Getter
-public class Comment extends BaseTimeEntity {
+public class Comment extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "author_id", nullable = false)
 	private Member author;
 
-	@Column(nullable = false)
+	@Lob @Column(nullable = false)
 	private String content;
 
 	@ManyToOne

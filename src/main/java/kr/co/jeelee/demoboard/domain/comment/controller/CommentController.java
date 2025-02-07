@@ -25,7 +25,7 @@ public class CommentController {
             @PathVariable UUID postId,
             @PageableDefault(size = 5) Pageable pageable
     ) {
-        return commentService.findAllByPostId(postId, pageable);
+        return commentService.findAllByParentId(postId, pageable);
     }
 
     @PostMapping
@@ -33,7 +33,7 @@ public class CommentController {
             @PathVariable UUID postId,
             @Valid @RequestBody CommentCreateRequest request
     ) {
-        return commentService.createByPostId(postId, request);
+        return commentService.createByParentId(postId, request);
     }
 
     @DeleteMapping(path = "/{id}")
@@ -41,7 +41,7 @@ public class CommentController {
             @PathVariable UUID postId,
             @PathVariable UUID id
     ) {
-        commentService.deleteCommentById(postId, id);
+        commentService.delete(postId, id);
     }
 
 }
