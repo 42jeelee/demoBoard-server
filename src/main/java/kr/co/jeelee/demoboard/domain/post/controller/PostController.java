@@ -1,6 +1,7 @@
 package kr.co.jeelee.demoboard.domain.post.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -28,27 +29,36 @@ public class PostController {
 
 	@GetMapping
 	@AllowedSortFields({"createdAt", "updatedAt"})
-	public List<PostSummaryResponse> getPosts(@PageableDefault(size = 5) Pageable pageable) {
+	public List<PostSummaryResponse> getPosts(
+			@PageableDefault(size = 5) Pageable pageable
+	) {
 		return postService.findAll(pageable);
 	}
 
 	@GetMapping("/{postId}")
-	public PostDetailResponse getPostById(@Min(1) @PathVariable Long postId) {
+	public PostDetailResponse getPostById(
+			@Min(1) @PathVariable UUID postId
+	) {
 		return postService.findById(postId);
 	}
 
 	@PostMapping
-	public PostDetailResponse createPost(@Valid @RequestBody PostCreateRequest request) {
+	public PostDetailResponse createPost(
+			@Valid @RequestBody PostCreateRequest request
+	) {
 		return postService.create(request);
 	}
 
 	@PutMapping("/{postId}")
-	public PostDetailResponse updatePost(@Min(1) @PathVariable Long postId, @Valid @RequestBody PostUpdateRequest request) {
-		return postService.updateById(postId, request);
+	public PostDetailResponse updatePost(
+			@Min(1) @PathVariable UUID postId,
+			@Valid @RequestBody PostUpdateRequest request
+	) {
+		return postService.update(postId, request);
 	}
 
-	@PutMapping("/{postId}/delete")
-	public void deletePost(@PathVariable Long postId, @RequestBody String password) {
-		postService.deleteById(postId, password);
+	@DeleteMapping("/{postId}/delete")
+	public void deletePost(@PathVariable UUID postId) {
+		postService.delete(postId);
 	}
 }

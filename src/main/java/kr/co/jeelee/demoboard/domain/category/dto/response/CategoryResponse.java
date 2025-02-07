@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import kr.co.jeelee.demoboard.domain.category.entity.Category;
 
+import java.util.UUID;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record CategoryResponse (Long id, String name, Long postCount) {
+public record CategoryResponse (UUID id, String name, Long postCount) {
 	public static CategoryResponse from(Category category, Long postCount) {
 		return new CategoryResponse(category.getId(), category.getName(), postCount);
 	}

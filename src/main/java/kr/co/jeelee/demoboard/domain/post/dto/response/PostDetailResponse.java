@@ -1,12 +1,14 @@
 package kr.co.jeelee.demoboard.domain.post.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import kr.co.jeelee.demoboard.domain.category.dto.response.CategoryResponse;
+import kr.co.jeelee.demoboard.domain.member.dto.response.MemberSimpleResponse;
 import kr.co.jeelee.demoboard.domain.post.entity.Post;
 
 public record PostDetailResponse(
-		Long id, String title, String author,
+		UUID id, String title, MemberSimpleResponse author,
 		CategoryResponse category, String content, Long views,
 		LocalDateTime updatedAt, LocalDateTime createdAt
 ) {
@@ -14,7 +16,7 @@ public record PostDetailResponse(
 		return new PostDetailResponse(
 				post.getId(),
 				post.getTitle(),
-				post.getAuthor(),
+				MemberSimpleResponse.from(post.getAuthor()),
 				CategoryResponse.from(post.getCategory()),
 				post.getContent(),
 				post.getViews(),

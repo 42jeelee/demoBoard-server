@@ -8,18 +8,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.UUID;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
-
-    @Query(value = "SELECT p.password FROM Post p WHERE p.id = :postId")
-    Optional<String> findPasswordById(@Param("postId") Long postId);
+public interface PostRepository extends JpaRepository<Post, UUID> {
 
     @Transactional
     @Modifying
     @Query(value = "UPDATE Post p SET p.views = p.views + 1 WHERE p.id = :postId")
-    void incrementViews(@Param("postId") Long postId);
+    void incrementViews(@Param("postId") UUID postId);
 
-    Long countPostByCategoryId(Long categoryId);
+    Long countPostByCategoryId(UUID categoryId);
 
 }

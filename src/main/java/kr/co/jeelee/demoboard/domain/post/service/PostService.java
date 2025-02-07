@@ -4,24 +4,14 @@ import kr.co.jeelee.demoboard.domain.post.dto.request.PostCreateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostDetailResponse;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostSummaryResponse;
-import org.springframework.data.domain.Pageable;
+import kr.co.jeelee.demoboard.global.service.EntityService;
 
-import java.util.List;
+import java.util.UUID;
 
-public interface PostService {
-
-    List<PostSummaryResponse> findAll(Pageable pageable);
-
-    PostDetailResponse findById(Long id);
-
-    PostDetailResponse create(PostCreateRequest request);
-
-    PostDetailResponse updateById(Long postId, PostUpdateRequest request);
-
-    Long countPostByCategoryId(Long categoryId);
-
-    void deleteById(Long postId, String password);
-
-    void increaseViewsById(Long postId);
-
+public interface PostService
+        extends EntityService<
+            PostCreateRequest, PostUpdateRequest,
+            PostSummaryResponse, PostDetailResponse
+        > {
+    void increaseViewsById(UUID id);
 }

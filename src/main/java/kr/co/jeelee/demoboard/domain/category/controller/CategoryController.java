@@ -1,11 +1,13 @@
 package kr.co.jeelee.demoboard.domain.category.controller;
 
 import java.util.List;
+import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.jeelee.demoboard.domain.category.dto.response.CategoryResponse;
@@ -21,17 +23,16 @@ public class CategoryController {
 
 	@GetMapping
 	public List<CategoryResponse> getCategories(
-		@RequestParam(name = "postCount", defaultValue = "false") boolean isPostCount
+		@PageableDefault(size = 5) Pageable pageable
 	) {
-		return categoryService.findAll(isPostCount);
+		return categoryService.findAll(pageable);
 	}
 
-	@GetMapping("/{categoryId}")
+	@GetMapping("/{id}")
 	public CategoryResponse getCategory(
-		@PathVariable Long categoryId,
-		@RequestParam(name = "postCount", defaultValue = "false") boolean isPostCount
+		@PathVariable UUID id
 	) {
-		return categoryService.findById(categoryId, isPostCount);
+		return categoryService.findById(id);
 	}
 
 }

@@ -5,7 +5,6 @@ import kr.co.jeelee.demoboard.domain.member.dto.request.MemberCreateRequest;
 import kr.co.jeelee.demoboard.domain.member.dto.request.MemberUpdateRequest;
 import kr.co.jeelee.demoboard.domain.member.dto.response.MemberDetailResponse;
 import kr.co.jeelee.demoboard.domain.member.dto.response.MemberSimpleResponse;
-
 import kr.co.jeelee.demoboard.domain.member.entity.Member;
 import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
 import kr.co.jeelee.demoboard.global.exception.custom.ErrorCode;
@@ -28,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberSimpleResponse> findAll(Pageable pageable) {
-        return memberRepository.findAll(pageable)
+        return memberRepository.findAll(pageable).stream()
                 .map(MemberSimpleResponse::from)
                 .toList();
     }
@@ -44,18 +43,20 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberDetailResponse create(MemberCreateRequest request) {
         String encodedPassword = passwordEncoder.encode(request.password());
+
         Member member = Member.of(
                 request.name(),
                 request.nickname(),
                 request.email(),
                 encodedPassword
         );
+
         return MemberDetailResponse.from(memberRepository.save(member));
     }
 
     @Override
     @Transactional
-    public MemberDetailResponse updateById(UUID id, MemberUpdateRequest request) {
+    public MemberDetailResponse update(UUID id, MemberUpdateRequest request) {
         return null;
     }
 
@@ -64,5 +65,4 @@ public class MemberServiceImpl implements MemberService {
     public void delete(UUID id) {
         memberRepository.deleteById(id);
     }
-
 }

@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/posts/{postId}/comments")
@@ -21,26 +22,26 @@ public class CommentController {
 
     @GetMapping
     public List<CommentResponse> getComments(
-            @PathVariable Long postId,
+            @PathVariable UUID postId,
             @PageableDefault(size = 5) Pageable pageable
     ) {
-        return commentService.findAllByPostId(postId, pageable);
+        return commentService.findAllByParentId(postId, pageable);
     }
 
     @PostMapping
     public CommentResponse addComment(
-            @PathVariable Long postId,
+            @PathVariable UUID postId,
             @Valid @RequestBody CommentCreateRequest request
     ) {
-        return commentService.createByPostId(postId, request);
+        return commentService.createByParentId(postId, request);
     }
 
-    @DeleteMapping(path = "/{commentId}")
+    @DeleteMapping(path = "/{id}")
     public void deleteComment(
-            @PathVariable Long postId,
-            @PathVariable Long commentId
+            @PathVariable UUID postId,
+            @PathVariable UUID id
     ) {
-        commentService.deleteCommentById(postId, commentId);
+        commentService.delete(postId, id);
     }
 
 }

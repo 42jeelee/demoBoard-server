@@ -1,55 +1,55 @@
 package kr.co.jeelee.demoboard.domain.category.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Collections;
-import java.util.stream.Collectors;
-
+import kr.co.jeelee.demoboard.domain.category.dto.response.CategoryResponse;
+import kr.co.jeelee.demoboard.domain.category.entity.Category;
+import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
+import kr.co.jeelee.demoboard.global.exception.custom.ErrorCode;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import kr.co.jeelee.demoboard.domain.category.dao.CategoryRepository;
-import kr.co.jeelee.demoboard.domain.category.dto.response.CategoryResponse;
-import kr.co.jeelee.demoboard.domain.post.service.PostService;
-import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
-import kr.co.jeelee.demoboard.global.exception.custom.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
 	private final CategoryRepository categoryRepository;
-	private final PostService postService;
 
 	@Override
-	public List<CategoryResponse> findAll(final boolean isPostCount) {
-		Map<Long, Long> countPostByCategoryId = isPostCount
-			? categoryRepository.countPostByCategoryId().stream()
-				.collect(Collectors.toMap(
-					result -> (Long) result[0],
-					result -> (Long) result[1]
-				))
-			: Collections.emptyMap();
-
-		return categoryRepository.findAll().stream()
-			.map(categoryEntity -> {
-				Long postCount = countPostByCategoryId.get(categoryEntity.getId());
-
-				return CategoryResponse.from(categoryEntity, postCount);
-			}).toList();
+	public List<CategoryResponse> findAll(Pageable pageable) {
+		return categoryRepository.findAll(pageable).stream()
+				.map(CategoryResponse::from)
+				.toList();
 	}
 
 	@Override
-	public CategoryResponse findById(final Long id, final boolean isPostCount) {
-
+	public CategoryResponse findById(UUID id) {
 		return categoryRepository.findById(id)
-			.map(categoryEntity -> {
-				final Long postCount = isPostCount
-				? postService.countPostByCategoryId(id) : null;
-
-				return CategoryResponse.from(categoryEntity, postCount);
-			})
-			.orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+				.map(CategoryResponse::from)
+				.orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 	}
 
+	@Override
+	@Transactional
+	public CategoryResponse create(String request) {
+		Category category = Category.of(request);
+		return CategoryResponse.from(categoryRepository.save(category));
+	}
+
+	@Override
+	@Transactional
+	public CategoryResponse update(UUID id, String request) {
+		return null;
+	}
+
+	@Override
+	@Transactional
+	public void delete(UUID id) {
+		categoryRepository.deleteById(id);
+	}
 }
