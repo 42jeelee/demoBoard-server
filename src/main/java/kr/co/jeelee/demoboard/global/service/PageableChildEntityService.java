@@ -9,9 +9,9 @@ public interface PageableChildEntityService<Q, S> {
 
     default List<S> findAll(UUID parentId, Pageable pageable) {
         throw new UnsupportedOperationException();
-    };
+    }
 
     default List<S> search(UUID parentId, Q query, Pageable pageable) {
         throw new UnsupportedOperationException();
-    };
+    }
 }

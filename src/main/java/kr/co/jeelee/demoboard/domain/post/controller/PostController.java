@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostDetailResponse;
 import kr.co.jeelee.demoboard.domain.post.dto.response.PostSummaryResponse;

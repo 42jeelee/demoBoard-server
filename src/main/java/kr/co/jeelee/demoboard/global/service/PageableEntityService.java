@@ -8,10 +8,10 @@ public interface PageableEntityService<Q, S> {
 
     default List<S> findAll(Pageable pageable) {
         throw new UnsupportedOperationException();
-    };
+    }
 
     default List<S> search(Q query, Pageable pageable) {
         throw new UnsupportedOperationException();
-    };
+    }
 
 }
