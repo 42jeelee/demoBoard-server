@@ -16,16 +16,10 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
 
 	private final CategoryRepository categoryRepository;
-
-	@Override
-	public List<CategoryResponse> findAll(Pageable pageable) {
-		return categoryRepository.findAll(pageable).stream()
-				.map(CategoryResponse::from)
-				.toList();
-	}
 
 	@Override
 	public CategoryResponse findById(UUID id) {
@@ -38,18 +32,27 @@ public class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	public CategoryResponse create(String request) {
 		Category category = Category.of(request);
-		return CategoryResponse.from(categoryRepository.save(category));
-	}
 
-	@Override
-	@Transactional
-	public CategoryResponse update(UUID id, String request) {
-		return null;
+		return CategoryResponse.from(categoryRepository.save(category));
 	}
 
 	@Override
 	@Transactional
 	public void delete(UUID id) {
 		categoryRepository.deleteById(id);
+	}
+
+	@Override
+	public List<CategoryResponse> findAll(Pageable pageable) {
+		return categoryRepository.findAll(pageable).stream()
+				.map(CategoryResponse::from)
+				.toList();
+	}
+
+	@Override
+	public List<CategoryResponse> search(String query, Pageable pageable) {
+		return categoryRepository.searchCategoriesByName(query, pageable).stream()
+				.map(CategoryResponse::from)
+				.toList();
 	}
 }

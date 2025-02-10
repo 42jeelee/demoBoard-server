@@ -35,11 +35,11 @@ public class PostController {
 		return postService.findAll(pageable);
 	}
 
-	@GetMapping("/{postId}")
+	@GetMapping("/{id}")
 	public PostDetailResponse getPostById(
-			@Min(1) @PathVariable UUID postId
+			@PathVariable UUID id
 	) {
-		return postService.findById(postId);
+		return postService.findById(id);
 	}
 
 	@PostMapping
@@ -49,16 +49,16 @@ public class PostController {
 		return postService.create(request);
 	}
 
-	@PutMapping("/{postId}")
+	@PutMapping("/{id}")
 	public PostDetailResponse updatePost(
-			@Min(1) @PathVariable UUID postId,
+			@PathVariable UUID id,
 			@Valid @RequestBody PostUpdateRequest request
 	) {
-		return postService.update(postId, request);
+		return postService.update(id, request);
 	}
 
-	@DeleteMapping("/{postId}/delete")
-	public void deletePost(@PathVariable UUID postId) {
-		postService.delete(postId);
+	@DeleteMapping("/{id}/delete")
+	public void deletePost(@PathVariable UUID id) {
+		postService.delete(id);
 	}
 }

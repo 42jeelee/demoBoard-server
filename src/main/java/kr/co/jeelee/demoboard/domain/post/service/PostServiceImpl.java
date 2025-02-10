@@ -44,6 +44,18 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	public List<PostSummaryResponse> search(String query, Pageable pageable) {
+		return postRepository.searchPostsByTitle(query, pageable).stream()
+				.map(PostSummaryResponse::from)
+				.toList();
+	}
+
+	@Override
+	public PostDetailResponse update(UUID id, PostUpdateRequest postUpdateRequest) {
+		return null;
+	}
+
+	@Override
 	public PostDetailResponse findById(UUID id) {
 
 		eventPublisher.publishEvent(new FindPostEvent(id));
@@ -67,12 +79,6 @@ public class PostServiceImpl implements PostService {
 		);
 
 		return PostDetailResponse.from(postRepository.save(post));
-	}
-
-	@Override
-	@Transactional
-	public PostDetailResponse update(UUID id, PostUpdateRequest request) {
-		return null;
 	}
 
 	@Override
