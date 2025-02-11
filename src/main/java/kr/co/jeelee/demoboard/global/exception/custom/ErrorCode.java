@@ -20,6 +20,8 @@ public enum ErrorCode {
 
 	REQUEST_INVALID(HttpStatus.BAD_REQUEST, "REQUEST-001", "잘못된 요청입니다."),
 
+	KEYGEN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER-001", "서버가 키생성에 실패하였습니다."),
+
 	;
 
 	private final HttpStatus status;
