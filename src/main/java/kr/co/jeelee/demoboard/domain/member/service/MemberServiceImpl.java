@@ -33,6 +33,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public List<MemberSimpleResponse> search(String query, Pageable pageable) {
+        return memberRepository.searchMembersByNicknameOrName(query, query, pageable).stream()
+                .map(MemberSimpleResponse::from)
+                .toList();
+    }
+
+    @Override
     public MemberDetailResponse findById(UUID id) {
         return memberRepository.findById(id)
                 .map(MemberDetailResponse::from)
@@ -56,13 +63,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberDetailResponse update(UUID id, MemberUpdateRequest request) {
-        return null;
+    public void delete(UUID id) {
+        memberRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public void delete(UUID id) {
-        memberRepository.deleteById(id);
+    public MemberDetailResponse update(UUID id, MemberUpdateRequest memberUpdateRequest) {
+        return null;
     }
 }

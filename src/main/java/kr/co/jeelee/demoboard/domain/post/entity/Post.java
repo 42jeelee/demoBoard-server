@@ -2,13 +2,14 @@ package kr.co.jeelee.demoboard.domain.post.entity;
 
 import jakarta.persistence.*;
 
-import kr.co.jeelee.demoboard.domain.category.entity.Category;
 import kr.co.jeelee.demoboard.domain.comment.entity.Comment;
 import kr.co.jeelee.demoboard.domain.member.entity.Member;
+import kr.co.jeelee.demoboard.domain.relationship.postCategory.entity.PostCategory;
 import kr.co.jeelee.demoboard.global.entity.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,11 +25,10 @@ public class Post extends BaseEntity {
 	@JoinColumn(name = "author_id", nullable = false)
 	private Member author;
 
-	@ManyToOne
-	@JoinColumn(name = "category_id", nullable = false)
-	private Category category;
+	@OneToMany(mappedBy = "a", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PostCategory> postCategories;
 
-	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Comment> comments;
 
 	@Lob @Column
@@ -37,16 +37,17 @@ public class Post extends BaseEntity {
 	@Column(nullable = false)
 	private Long views;
 
-	private Post(String title, Member author, Category category, String content) {
+	private Post(String title, Member author, String content) {
 		this.title = title;
 		this.author = author;
-		this.category = category;
+		this.postCategories = new ArrayList<>();
+		this.comments = new ArrayList<>();
 		this.content = content;
 		this.views = 0L;
 	}
 
-	public static Post of(String title, Member author, Category category, String content) {
-		return new Post(title, author, category, content);
+	public static Post of(String title, Member author, String content) {
+		return new Post(title, author, content);
 	}
 
 	public void update(String title, String content) {

@@ -25,7 +25,7 @@ public class CommentController {
             @PathVariable UUID postId,
             @PageableDefault(size = 5) Pageable pageable
     ) {
-        return commentService.findAllByParentId(postId, pageable);
+        return commentService.findAll(postId, pageable);
     }
 
     @PostMapping

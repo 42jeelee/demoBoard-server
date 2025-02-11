@@ -18,7 +18,7 @@ public enum ErrorCode {
 
 	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT-001", "해당 댓글을 찾을 수 없습니다."),
 
-	REQUEST_INVALID(HttpStatus.BAD_REQUEST, "REQUEST-001", "요청 필드값이 잘못되었습니다."),
+	REQUEST_INVALID(HttpStatus.BAD_REQUEST, "REQUEST-001", "잘못된 요청입니다."),
 
 	;
 
