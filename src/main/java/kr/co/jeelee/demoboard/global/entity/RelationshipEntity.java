@@ -1,14 +1,21 @@
 package kr.co.jeelee.demoboard.global.entity;
 
-import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 
 @Getter
 @MappedSuperclass
-public abstract class RelationshipEntity extends BaseTimeEntity {
+public abstract class RelationshipEntity
+        <A extends BaseEntity, B extends BaseEntity> extends BaseEntity {
 
-    @EmbeddedId
-    protected RelationshipEntityId id;
+    @ManyToOne
+    @JoinColumn(name = "a_id", nullable = false)
+    protected A a;
+
+    @ManyToOne
+    @JoinColumn(name = "b_id", nullable = false)
+    protected B b;
 
 }

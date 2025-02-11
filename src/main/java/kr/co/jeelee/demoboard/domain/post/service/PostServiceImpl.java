@@ -3,12 +3,11 @@ package kr.co.jeelee.demoboard.domain.post.service;
 import java.util.List;
 import java.util.UUID;
 
-import kr.co.jeelee.demoboard.domain.category.entity.Category;
 import kr.co.jeelee.demoboard.domain.member.entity.Member;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostCreateRequest;
 import kr.co.jeelee.demoboard.domain.post.dto.request.PostUpdateRequest;
 
-import kr.co.jeelee.demoboard.global.util.CategoryUtil;
+import kr.co.jeelee.demoboard.domain.relationship.postCategory.service.PostCategoryServiceImpl;
 import kr.co.jeelee.demoboard.global.util.MemberUtil;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +31,7 @@ public class PostServiceImpl implements PostService {
 	private final PostRepository postRepository;
 
 	private final MemberUtil memberUtil;
-	private final CategoryUtil categoryUtil;
+	private final PostCategoryServiceImpl postCategoryService;
 
 	private final ApplicationEventPublisher eventPublisher;
 
@@ -68,17 +67,18 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public PostDetailResponse create(PostCreateRequest request) {
-		Category category = categoryUtil.getById(request.categoryId());
 		Member author = memberUtil.getById(request.authorId());
 
 		Post post = Post.of(
 				request.title(),
 				author,
-				category,
 				request.content()
 		);
 
-		return PostDetailResponse.from(postRepository.save(post));
+		return postCategoryService.create(
+				postRepository.save(post).getId(),
+				request.categories()
+		);
 	}
 
 	@Override

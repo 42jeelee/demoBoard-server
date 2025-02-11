@@ -1,5 +1,6 @@
 package kr.co.jeelee.demoboard.domain.category.service;
 
+import kr.co.jeelee.demoboard.domain.category.dto.response.CategoryDetailResponse;
 import kr.co.jeelee.demoboard.domain.category.dto.response.CategoryResponse;
 import kr.co.jeelee.demoboard.domain.category.entity.Category;
 import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
@@ -22,18 +23,18 @@ public class CategoryServiceImpl implements CategoryService {
 	private final CategoryRepository categoryRepository;
 
 	@Override
-	public CategoryResponse findById(UUID id) {
+	public CategoryDetailResponse findById(UUID id) {
 		return categoryRepository.findById(id)
-				.map(CategoryResponse::from)
+				.map(CategoryDetailResponse::from)
 				.orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 	}
 
 	@Override
 	@Transactional
-	public CategoryResponse create(String request) {
+	public CategoryDetailResponse create(String request) {
 		Category category = Category.of(request);
 
-		return CategoryResponse.from(categoryRepository.save(category));
+		return CategoryDetailResponse.from(categoryRepository.save(category));
 	}
 
 	@Override

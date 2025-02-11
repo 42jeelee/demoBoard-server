@@ -19,8 +19,6 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     @Query(value = "UPDATE Post p SET p.views = p.views + 1 WHERE p.id = :postId")
     void incrementViews(@Param("postId") UUID postId);
 
-    Long countPostByCategoryId(UUID categoryId);
-
     List<Post> searchPostsByTitle(String title, Pageable pageable);
 
 }
