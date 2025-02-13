@@ -41,4 +41,8 @@ public class MemberUtil implements EntityUtil<Member> {
         return memberRepository.findAllById(ids);
     }
 
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
 }

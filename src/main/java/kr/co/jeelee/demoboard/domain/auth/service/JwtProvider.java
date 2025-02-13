@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtProvider {
 
+	private final String ISSUER = "admin";
+	private final String KEY_AUTHORITIES = "authorities";
 	private final int ACCESS_TOKEN_EXP = 360;
 	private final int REFRESH_TOKEN_EXP = 600;
 
@@ -28,7 +30,7 @@ public class JwtProvider {
 	public String generateAccessToken(Authentication authentication) {
 
 		Map<String, Object> claims = Map.of(
-				"authorities",
+				KEY_AUTHORITIES,
 				authentication.getAuthorities().stream()
 					.map(GrantedAuthority::getAuthority)
 					.collect(Collectors.joining(","))
@@ -47,7 +49,7 @@ public class JwtProvider {
 		JwtClaimsSet claimsSet = JwtClaimsSet.builder()
 				.subject(subject)
 				.claims(claim -> claim.putAll(claims))
-				.issuer("admin")
+				.issuer(ISSUER)
 				.issuedAt(now)
 				.expiresAt(now.plusSeconds(expiration))
 				.build();
@@ -66,12 +68,20 @@ public class JwtProvider {
 		if (
 				!isExpired(accessJwt)
 				|| !accessJwt.getSubject().equals(refreshJwt.getSubject())
-				|| accessJwt.getClaim("authorities") == null
+				|| accessJwt.getClaim(KEY_AUTHORITIES) == null
 		) {
 			throw new CustomException(ErrorCode.REQUEST_INVALID);
 		}
 
-		return generateToken(accessJwt.getSubject(), Map.of("authorities", accessJwt.getClaim("authorities")), ACCESS_TOKEN_EXP);
+		return generateToken(accessJwt.getSubject(), Map.of(KEY_AUTHORITIES, accessJwt.getClaim(KEY_AUTHORITIES)), ACCESS_TOKEN_EXP);
+	}
+
+	public String getSubject(final String token) {
+		try {
+			return jwtDecoder.decode(token).getSubject();
+		} catch (JwtException e) {
+			throw new CustomException(ErrorCode.REQUEST_INVALID);
+		}
 	}
 
 	private boolean isExpired(final Jwt jwt) throws JwtException {
