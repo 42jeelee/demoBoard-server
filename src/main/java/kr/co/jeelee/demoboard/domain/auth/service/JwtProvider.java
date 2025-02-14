@@ -22,7 +22,7 @@ public class JwtProvider {
 	private final String ISSUER = "admin";
 	private final String KEY_AUTHORITIES = "authorities";
 	private final int ACCESS_TOKEN_EXP = 360;
-	private final int REFRESH_TOKEN_EXP = 600;
+	private final int REFRESH_TOKEN_EXP = 3600;
 
 	private final JwtEncoder jwtEncoder;
 	private final JwtDecoder jwtDecoder;
@@ -61,16 +61,13 @@ public class JwtProvider {
 		Jwt accessJwt = jwtDecoder.decode(accessToken);
 		Jwt refreshJwt = jwtDecoder.decode(refreshToken);
 
-		if (isExpired(refreshJwt) && !isRefreshToken(refreshJwt)) {
-			throw new JwtException("Invalid refresh token");
-		}
-
 		if (
-				!isExpired(accessJwt)
+				isExpired(refreshJwt) && !isRefreshToken(refreshJwt)
+				|| !isExpired(accessJwt)
 				|| !accessJwt.getSubject().equals(refreshJwt.getSubject())
 				|| accessJwt.getClaim(KEY_AUTHORITIES) == null
 		) {
-			throw new CustomException(ErrorCode.REQUEST_INVALID);
+			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
 
 		return generateToken(accessJwt.getSubject(), Map.of(KEY_AUTHORITIES, accessJwt.getClaim(KEY_AUTHORITIES)), ACCESS_TOKEN_EXP);
@@ -78,9 +75,14 @@ public class JwtProvider {
 
 	public String getSubject(final String token) {
 		try {
-			return jwtDecoder.decode(token).getSubject();
+			Jwt jwt = jwtDecoder.decode(token);
+			if (isRefreshToken(jwt)) {
+				throw new CustomException(ErrorCode.INVALID_TOKEN);
+			}
+
+			return jwt.getSubject();
 		} catch (JwtException e) {
-			throw new CustomException(ErrorCode.REQUEST_INVALID);
+			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
 	}
 
@@ -88,7 +90,7 @@ public class JwtProvider {
 		try {
 			return Objects.requireNonNull(jwt.getExpiresAt()).isBefore(Instant.now());
 		} catch (NullPointerException e) {
-			throw new JwtException("Expired or invalid JWT token");
+			throw new CustomException(ErrorCode.TOKEN_EXPIRED);
 		}
 	}
 
@@ -101,7 +103,7 @@ public class JwtProvider {
 
 			return Math.abs(diff.getSeconds() - REFRESH_TOKEN_EXP) < 10;
 		} catch (NullPointerException e) {
-			throw new JwtException("Expired or invalid JWT token");
+			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
 
 	}

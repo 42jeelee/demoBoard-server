@@ -1,4 +1,4 @@
-package kr.co.jeelee.demoboard.global.config.security;
+package kr.co.jeelee.demoboard.global.config.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.co.jeelee.demoboard.domain.auth.service.JwtProvider;
 import kr.co.jeelee.demoboard.domain.member.entity.Member;
+import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
 import kr.co.jeelee.demoboard.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -35,17 +37,19 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         String token = resolveToken(request);
 
-        if (token != null) {
-            String email = jwtProvider.getSubject(token);
-            Member member = memberUtil.findByEmail(email);
+        try {
+            if (token != null) {
+                String email = jwtProvider.getSubject(token);
+                Member member = memberUtil.findByEmail(email);
 
-            Collection<? extends GrantedAuthority> authorities = Arrays.stream(member.getRole().split(","))
-                    .map(SimpleGrantedAuthority::new)
-                    .toList();
+                Collection<? extends GrantedAuthority> authorities = Arrays.stream(member.getRole().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .toList();
 
-            Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(member, token, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+                Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(member, token, authorities);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (JwtException | CustomException ignored) {}
 
         filterChain.doFilter(request, response);
     }
