@@ -21,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -39,8 +40,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
         try {
             if (token != null) {
-                String email = jwtProvider.getSubject(token);
-                Member member = memberUtil.findByEmail(email);
+                UUID id = UUID.fromString(jwtProvider.getSubject(token));
+                Member member = memberUtil.getById(id);
 
                 Collection<? extends GrantedAuthority> authorities = Arrays.stream(member.getRole().split(","))
                         .map(SimpleGrantedAuthority::new)
@@ -49,7 +50,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(member, token, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (JwtException | CustomException ignored) {}
+        } catch (JwtException | CustomException | IllegalArgumentException ignored) {}
 
         filterChain.doFilter(request, response);
     }

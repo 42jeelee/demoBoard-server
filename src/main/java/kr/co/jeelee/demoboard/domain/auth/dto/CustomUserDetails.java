@@ -24,7 +24,7 @@ public record CustomUserDetails(
 
     @Override
     public String getUsername() {
-        return member().getEmail();
+        return member().getId().toString();
     }
 
     public static CustomUserDetails from(Member member) {
