@@ -6,6 +6,7 @@ import kr.co.jeelee.demoboard.domain.member.dto.response.MemberDetailResponse;
 import kr.co.jeelee.demoboard.domain.member.dto.response.MemberSimpleResponse;
 import kr.co.jeelee.demoboard.domain.member.service.MemberService;
 import kr.co.jeelee.demoboard.global.annotation.AllowedSortFields;
+import kr.co.jeelee.demoboard.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,6 +23,12 @@ import java.util.UUID;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberUtil memberUtil;
+
+    @GetMapping(value = "/me")
+    public MemberDetailResponse me() {
+        return MemberDetailResponse.from(memberUtil.getMe());
+    }
 
     @GetMapping
     @AllowedSortFields({"createdAt", "updatedAt"})
