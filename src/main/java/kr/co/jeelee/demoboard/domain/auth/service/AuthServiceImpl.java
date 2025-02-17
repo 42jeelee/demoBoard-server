@@ -12,7 +12,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtProvider jwtProvider;
 
     @Override
-    public TokenDTO generateToken(Authentication authentication) {
+    public TokenDTO generateToken(final Authentication authentication) {
         String accessToken = jwtProvider.generateAccessToken(authentication);
         String refreshToken = jwtProvider.generateRefreshToken(authentication);
 
@@ -20,14 +20,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenDTO refresh(TokenDTO tokenDTO) {
+    public TokenDTO refresh(final TokenDTO tokenDTO) {
         String newToken = jwtProvider.refresh(tokenDTO.accessToken(), tokenDTO.refreshToken());
 
         return TokenDTO.of(newToken);
     }
 
     @Override
-    public boolean validateToken(String accessToken) {
+    public boolean validateToken(final String accessToken) {
         return false;
     }
 }

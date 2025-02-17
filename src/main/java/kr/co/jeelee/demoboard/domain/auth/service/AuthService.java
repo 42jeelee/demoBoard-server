@@ -7,8 +7,8 @@ public interface AuthService {
 
     TokenDTO generateToken(final Authentication authentication);
 
-    TokenDTO refresh(TokenDTO tokenDTO);
+    TokenDTO refresh(final TokenDTO tokenDTO);
 
-    boolean validateToken(String accessToken);
+    boolean validateToken(final String accessToken);
 
 }

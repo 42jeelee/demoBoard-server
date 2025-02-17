@@ -44,7 +44,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.POST, "/categories/**").hasRole("ADMIN")
 
 				.requestMatchers(HttpMethod.POST, "/posts", "/comments").hasRole("MEMBER")
-				.requestMatchers(HttpMethod.POST, "/members", "/login").permitAll()
+				.requestMatchers(HttpMethod.POST, "/members", "/login", "/auth/refresh").permitAll()
 
 				.requestMatchers(HttpMethod.GET ,"/", "/posts/**", "/categories/**").permitAll()
 				.anyRequest().authenticated()

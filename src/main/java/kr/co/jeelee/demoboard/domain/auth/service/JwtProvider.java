@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtProvider {
 
 	private final String ISSUER = "admin";
-	private final String KEY_AUTHORITIES = "authorities";
+	private final String KEY_AUTHORITIES = "aut";
 	private final int ACCESS_TOKEN_EXP = 360;
 	private final int REFRESH_TOKEN_EXP = 3600;
 
@@ -80,6 +80,10 @@ public class JwtProvider {
 				throw new CustomException(ErrorCode.INVALID_TOKEN);
 			}
 
+			if (isExpired(jwt)) {
+				throw new CustomException(ErrorCode.TOKEN_EXPIRED);
+			}
+
 			return jwt.getSubject();
 		} catch (JwtException e) {
 			throw new CustomException(ErrorCode.INVALID_TOKEN);
@@ -90,7 +94,7 @@ public class JwtProvider {
 		try {
 			return Objects.requireNonNull(jwt.getExpiresAt()).isBefore(Instant.now());
 		} catch (NullPointerException e) {
-			throw new CustomException(ErrorCode.TOKEN_EXPIRED);
+			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
 	}
 

@@ -3,8 +3,8 @@ package kr.co.jeelee.demoboard.domain.auth.controller;
 import kr.co.jeelee.demoboard.domain.auth.dto.LoginRequest;
 import kr.co.jeelee.demoboard.domain.auth.dto.TokenDTO;
 import kr.co.jeelee.demoboard.domain.auth.service.AuthService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import kr.co.jeelee.demoboard.global.exception.custom.CustomException;
+import kr.co.jeelee.demoboard.global.exception.custom.ErrorCode;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,19 +21,24 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping(value = "/login")
-	public ResponseEntity<TokenDTO> login(
+	public TokenDTO login(
 			@RequestBody LoginRequest loginRequest
 	) {
 		Authentication authenticationRequest =
 				UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.email(), loginRequest.password());
 
 		try {
-			return ResponseEntity.ok(
-					authService.generateToken(authenticationManager.authenticate(authenticationRequest))
-			);
+			return authService.generateToken(authenticationManager.authenticate(authenticationRequest));
 		} catch (AuthenticationException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
+	}
+
+	@PostMapping(value = "/auth/refresh")
+	public TokenDTO refreshToken(
+			@RequestBody TokenDTO tokenDTO
+	) {
+		return authService.refresh(tokenDTO);
 	}
 
 }
